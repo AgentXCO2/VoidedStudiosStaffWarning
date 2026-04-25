@@ -1,34 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Panel - Targeted</title>
+<title>Admin Panel</title>
 
 <style>
 body {
   margin:0;
-  font-family:Arial;
+  font-family: Arial;
   background:#0b0b12;
   color:white;
-}
-
-header {
-  background:#151520;
-  padding:15px;
 }
 
 section {
   padding:20px;
 }
 
-input, select {
+input, button {
   padding:10px;
   margin:5px;
-  width:250px;
 }
 
 button {
-  padding:10px;
-  background:#5c6cff;
+  background:#ff4d4d;
   border:none;
   color:white;
   border-radius:6px;
@@ -38,22 +31,16 @@ button {
 
 <body>
 
-<header>🛠️ Voided Studios Admin (Target System)</header>
-
 <section>
-<h2>Create Targeted Notification</h2>
 
-<input id="user" placeholder="Target Username"><br>
+<h2>🛠️ Admin Panel</h2>
 
-<select id="type">
-  <option value="promotion">Promotion</option>
-  <option value="warning">Warning</option>
-  <option value="strike">Strike</option>
-</select><br>
+<input id="to" placeholder="Username"><br>
+<input id="msg" placeholder="Message"><br>
 
-<input id="message" placeholder="Message / Reason"><br>
+<button onclick="send()">Send</button>
+<button onclick="logout()">Logout</button>
 
-<button onclick="send()">Send to User</button>
 </section>
 
 <script type="module">
@@ -65,25 +52,35 @@ import {
   addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+import {
+  getAuth,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "voidedstudios-admin.firebaseapp.com",
-  projectId: "voidedstudios-admin"
+  apiKey: "AIzaSyAJ9-hLzsxyHsnxHNnohbl7uI4gCa8ELjk",
+  authDomain: "voided-studios-core.firebaseapp.com",
+  projectId: "voided-studios-core"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-/* SEND TARGETED NOTIFICATION */
+/* 📤 SEND MESSAGE (TARGET USERNAME) */
 window.send = async () => {
-  await addDoc(collection(db,"notifications"), {
-    to: user.value,
-    type: type.value,
-    message: message.value,
+  await addDoc(collection(db,"messages"), {
+    to: to.value,
+    message: msg.value,
     time: Date.now()
   });
 
-  alert("Sent to " + user.value);
+  alert("Sent to " + to.value);
+};
+
+/* 🚪 LOGOUT */
+window.logout = () => {
+  signOut(auth);
 };
 
 </script>
