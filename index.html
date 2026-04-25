@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel - Targeted</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  background:#0b0b12;
+  color:white;
+}
+
+header {
+  background:#151520;
+  padding:15px;
+}
+
+section {
+  padding:20px;
+}
+
+input, select {
+  padding:10px;
+  margin:5px;
+  width:250px;
+}
+
+button {
+  padding:10px;
+  background:#5c6cff;
+  border:none;
+  color:white;
+  border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🛠️ Voided Studios Admin (Target System)</header>
+
+<section>
+<h2>Create Targeted Notification</h2>
+
+<input id="user" placeholder="Target Username"><br>
+
+<select id="type">
+  <option value="promotion">Promotion</option>
+  <option value="warning">Warning</option>
+  <option value="strike">Strike</option>
+</select><br>
+
+<input id="message" placeholder="Message / Reason"><br>
+
+<button onclick="send()">Send to User</button>
+</section>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "voidedstudios-admin.firebaseapp.com",
+  projectId: "voidedstudios-admin"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* SEND TARGETED NOTIFICATION */
+window.send = async () => {
+  await addDoc(collection(db,"notifications"), {
+    to: user.value,
+    type: type.value,
+    message: message.value,
+    time: Date.now()
+  });
+
+  alert("Sent to " + user.value);
+};
+
+</script>
+
+</body>
+</html>
